@@ -21,7 +21,7 @@ try {
         $sql .= " WHERE nombre LIKE :search OR apellidos LIKE :search";
         $params[':search'] = '%' . $_POST["search"]["value"] . '%';
     }
-////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
 
     // Orden de resultados
     if (isset($_POST["order"]) && is_array($_POST["order"])) {
@@ -29,14 +29,14 @@ try {
         $columnIndex = intval($_POST["order"][0]["column"]);
         //$column = intval($_POST["order"][0]["column"]);
         $dir = $_POST["order"][0]["dir"] === "desc" ? "DESC" : "ASC";
-       // $sql .= " ORDER BY " . $column . " " . $dir;
+        // $sql .= " ORDER BY " . $column . " " . $dir;
 
 
         // Mapeo de índices a nombres de columnas
         $columnNames = ["id", "nombre", "apellido", "telefono", "email", "imagen", "fecha_creacion"];
         $sql .= " ORDER BY " . $columnNames[$columnIndex] . " " . $dir;
 
-//////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////
 
 
     } else {
@@ -60,19 +60,19 @@ try {
         $stmt->bindValue($key, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
     }
 
-/////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
 
-// Ejecutar la consulta
-if ($stmt->execute()) {
+    // Ejecutar la consulta
+    if ($stmt->execute()) {
 
-    $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} else {
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
 
-    throw new Exception("Error ejecutando la consulta.");
-}
+        throw new Exception("Error ejecutando la consulta.");
+    }
 
-   // $stmt->execute();
-   // $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // $stmt->execute();
+    // $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
     // Procesar resultados
@@ -94,6 +94,8 @@ if ($stmt->execute()) {
         $datos[] = $sub_array;
     }
 
+    ///////////////////////////////////////////////
+
     // Crear salida en formato JSON
     $salida = [
         "draw" => intval($_POST["draw"]),
@@ -108,5 +110,3 @@ if ($stmt->execute()) {
 } catch (Exception $e) {
     echo json_encode(["error" => $e->getMessage()]);
 }
-
-?>
